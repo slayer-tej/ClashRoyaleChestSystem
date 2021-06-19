@@ -508,7 +508,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 71.83252}
+  m_SizeDelta: {x: 0, y: 76.90289}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &340759035
 MonoBehaviour:
@@ -962,6 +962,7 @@ MonoBehaviour:
   _generatorChestButton: {fileID: 1551615020}
   _chestPrefab: {fileID: 350795497513148193, guid: 4929c7ff04eb3554cac0a96f41f55438,
     type: 3}
+  chestsList: []
 --- !u!1 &966076426
 GameObject:
   m_ObjectHideFlags: 0

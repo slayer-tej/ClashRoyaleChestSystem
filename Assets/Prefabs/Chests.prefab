@@ -342,9 +342,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   locked: 1
-  isOpened: 0
-  _chestButton: {fileID: 3233153719305994396}
+  isUnlocking: 0
+  isCollected: 0
+  _buttonChest: {fileID: 3233153719305994396}
+  serviceChestsSystem: {fileID: 0}
   _optionsPanel: {fileID: 6094392307079411798}
+  _buttonStartUnlocking: {fileID: 3049470629158546459}
+  _buttonUnlockWithGems: {fileID: 8952344442718972186}
 --- !u!1 &465470371158865085
 GameObject:
   m_ObjectHideFlags: 0
