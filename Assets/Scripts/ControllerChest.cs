@@ -1,47 +1,37 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ControllerChest: MonoBehaviour
+public class ControllerChest : MonoBehaviour
 {
-    [SerializeField] private Button _generatorChestButton;
-    private int _numOfSlots = 4;
+    public bool locked = true;
+    public bool isOpened = false;
     [SerializeField]
-    // Start is called before the first frame update
-    void Start()
+    private Button _chestButton;
+    [SerializeField]
+    private GameObject _optionsPanel;
+
+    private void Start()
     {
-        _generatorChestButton.onClick.AddListener(GenerateRandomChest);
+        _chestButton.onClick.AddListener(OnClick);
     }
 
-    private void GenerateRandomChest()
+    private void OnClick()
     {
-        while(_numOfSlots <= 0)
+        Debug.Log("Button Clicked");
+        if (locked)
         {
-            int RandomChest = UnityEngine.Random.Range(-1, 4);
-            Debug.Log(RandomChest);
+            _optionsPanel.SetActive(true);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Unlock()
     {
-        
+        locked = false;
+    }
+    public void Open(bool status)
+    {
+        isOpened = status;
     }
 }
 
-public struct Chest
-{
-    private ChestType Type;
-    private int Coins;
-    private int Gems;
-}
-
-public enum ChestType
-{
-    Common,
-    Rare,
-    Epic,
-    Legendary
-}
