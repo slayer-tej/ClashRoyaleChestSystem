@@ -1,26 +1,32 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class ServiceChestsSystem: MonoSingletonGeneric<ServiceChestsSystem>
+public class ServiceChestSystem: MonoSingletonGeneric<ServiceChestSystem>
 {
+    public event Action<int> OnSelectionChanged;
+
+    public int _numOfSlots = 4;
     [SerializeField] private Button _generatorChestButton;
-    private int _numOfSlots = 4;
-    [SerializeField]
-    private GameObject _chestPrefab;
-    [SerializeField]
-    private List<ControllerChest> chestsList = new List<ControllerChest>();
-    // Start is called before the first frame update
+    [SerializeField] private GameObject _chestPrefab;
+    [SerializeField] private TextMeshProUGUI textFieldCoins;
+    [SerializeField] private TextMeshProUGUI textFieldGems;
+    [SerializeField] private List<ControllerChest> chestsList = new List<ControllerChest>();
+
+    public int coins;
+    public int gems;
+
     void Start()
     {
         _generatorChestButton.onClick.AddListener(GenerateRandomChest);
+        UpdateUI();
     }
 
     private void GenerateRandomChest()
     {
-       while(_numOfSlots > 0)
+       if(_numOfSlots > 0)
         {
             int RandomChest = UnityEngine.Random.Range(0, 4);
             LoadChest(RandomChest);
@@ -32,10 +38,40 @@ public class ServiceChestsSystem: MonoSingletonGeneric<ServiceChestsSystem>
     {
         foreach(ControllerChest chest in chestsList)
         {
-            if(chest.GetInstanceID() == controller.GetInstanceID())
+            if(chest.GetInstanceID() != controller.GetInstanceID())
             {
+                chest.Hold();
             }
         }
+    }
+
+    internal void EndUnlocking(ControllerChest controller)
+    {
+        for(int i = 0; i < chestsList.Count; i++)
+        {
+            if(chestsList[i].GetInstanceID() == controller.GetInstanceID())
+            {
+                chestsList[i].ReleaseSlot();
+                chestsList[i + 1].UnHold();
+            }
+        }
+        //foreach(ControllerChest chest in chestsList)
+        //{
+        //    if(chest.GetInstanceID() == controller.GetInstanceID())
+        //    {
+        //        chest.Hold();
+        //    }
+        //    else
+        //    {
+        //        chest.UnHold();
+        //    }
+        //}
+    }
+
+    public void UpdateUI()
+    {
+        textFieldCoins.text = coins.ToString();
+        textFieldGems.text = gems.ToString();
     }
 
     private void LoadChest(int randomChest)
@@ -46,8 +82,11 @@ public class ServiceChestsSystem: MonoSingletonGeneric<ServiceChestsSystem>
         ControllerChest controllerChest = Loot.GetComponent<ControllerChest>();
         controllerChest.InitializeValues(Randomchest);
         chestsList.Add(controllerChest);
-        Debug.Log("Chest Added to List");
-        Debug.Log("Total Chests Added : " + chestsList.Count);
+    }
+
+    internal void ChangeTab(int instanceID)
+    {
+        OnSelectionChanged.Invoke(instanceID);
     }
 }
 
@@ -69,22 +108,22 @@ public struct Chest
             case ChestType.Common:
                 coins = UnityEngine.Random.Range(100, 201);
                 gems = UnityEngine.Random.Range(10, 21);
-                timetoOpen = 300;
+                timetoOpen = 900;
                 break;
             case ChestType.Rare:
                 coins = UnityEngine.Random.Range(300, 501);
                 gems = UnityEngine.Random.Range(20, 41);
-                timetoOpen = 600;
+                timetoOpen = 1800;
                 break;
             case ChestType.Epic:
                 coins = UnityEngine.Random.Range(600, 801);
                 gems = UnityEngine.Random.Range(45, 61);
-                timetoOpen = 900;
+                timetoOpen = 3600;
                 break;
             case ChestType.Legendary:
                 coins = UnityEngine.Random.Range(1000, 1201);
                 gems = UnityEngine.Random.Range(80, 100);
-                timetoOpen = 1200;
+                timetoOpen = 10800;
                 break;
         }
     }
